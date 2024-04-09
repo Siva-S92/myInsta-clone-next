@@ -3,13 +3,59 @@ import Modal from "antd/es/modal/Modal";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MdAddCircleOutline } from "react-icons/md";
 import { HiCamera } from "react-icons/hi";
+import {getDownloadURL, getStorage, ref, uploadBytesResumable} from 'firebase/storage'
+import {app} from '../firebase'
+
 
 export default function Header() {
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [imagefileUrl, setImagefileUrl] = useState(null);
   const [isopen, setIsOpen] = useState(false);
+  const [imageFileUploading, setImageFileUploading] = useState(false);
+
+  const filePickerRef = useRef(null);
   const { data: session } = useSession();
+
+  useEffect(() => {
+    if(selectedFile){
+      uploadImageToStorage()
+    }
+  }, [selectedFile])
+
+  const addImageToPost = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      setImagefileUrl(URL.createObjectURL(file));
+    }
+  };
+
+
+  const uploadImageToStorage = async () => {
+    setImageFileUploading(true);
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + "-" + selectedFile.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, selectedFile);
+    uploadTask.on('state_changed', (snapshot)=> {
+      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      console.log(`Upload is ${progress} done`)
+    }, (error) => {
+      console.error(error);
+      setImageFileUploading(false);
+      setImagefileUrl(null)
+      setSelectedFile(null)
+    }, () => {
+      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        setImagefileUrl(downloadURL);
+        setImageFileUploading(false);
+      });
+    });
+  };
+
   return (
     <div>
       <div className="shadow-sm border-b sticky top-0 bg-white z-30 p-3">
@@ -74,8 +120,29 @@ export default function Header() {
           title={"choose your file"}
           onCancel={() => setIsOpen(!isopen)}
         >
-          <div className="flex justify-center items-center py-10">
-            <HiCamera className="text-7xl text-gray-300" />
+          <div className="flex flex-col justify-center items-center py-2">
+            {selectedFile ? (
+              <img
+                onClick={()=> setSelectedFile(null)}
+                className={`w-full max-h-[250px] object-cover ${imageFileUploading ? "animate-pulse" : ''}`}
+                src={imagefileUrl}
+                alt="selected file"
+              />
+            ) : (
+              <>
+                <HiCamera
+                  onClick={() => filePickerRef.current.click()}
+                  className="text-7xl text-gray-300 cursor-pointer"
+                />
+                <input
+                  className="hidden"
+                  ref={filePickerRef}
+                  onChange={addImageToPost}
+                  type="file"
+                  accept="image/*"
+                />
+              </>
+            )}
           </div>
           <input
             className="border-none outline-none w-full text-center h-8 mb-5"
