@@ -21,7 +21,7 @@ export default function CommentSection({ id }) {
   const [allcomments, setAllcomments] = useState([]);
 
   useEffect(() => {
-    onSnapshot(query(collection(db, "posts", id, "comments"), orderBy('timestamp', 'asc')), (snapshot) => {
+    onSnapshot(query(collection(db, "posts", id, "comments"), orderBy('timestamp', 'desc')), (snapshot) => {
       setAllcomments(snapshot.docs);
     });
   }, [db]);
