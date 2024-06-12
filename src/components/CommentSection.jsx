@@ -24,7 +24,7 @@ export default function CommentSection({ id }) {
     onSnapshot(query(collection(db, "posts", id, "comments"), orderBy('timestamp', 'desc')), (snapshot) => {
       setAllcomments(snapshot.docs);
     });
-  }, [db]);
+  }, [db, id]);
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();

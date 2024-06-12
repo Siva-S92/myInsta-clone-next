@@ -17,7 +17,7 @@ export default function LikeSection({id}) {
         onSnapshot(collection(db, 'posts', id, 'likes'), (snapsot)=> {
             setLikes(snapsot.docs)
         })
-    }, [db])
+    }, [db, id])
 
     useEffect(() => {
         if(likes.findIndex((like) => like.id === session?.user?.uid) !== -1) {
@@ -25,7 +25,7 @@ export default function LikeSection({id}) {
         } else {
             setHasliked(false)
         }
-    },[likes])
+    },[likes, session?.user?.uid])
 
     const likepost = async() => {
         if(hasliked){
