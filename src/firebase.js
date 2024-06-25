@@ -1,7 +1,5 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -16,22 +14,9 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-//databse
-const db = getFirestore();
-//storage
-const storage = getStorage(app);
 
-export { app, db, storage }
+export const app = initializeApp(firebaseConfig);
 
 
-// service firebase.storage {
-//     match /b/{bucket}/o {
-//       match /{allPaths=**} {
-//         allow read;
-//         allow write: if
-//         request.resource.size < 2 * 1024 * 1024 &&
-//         request.resource.contentType.matches('image/.*')
-//       }
-//     }
-//   }
+
+

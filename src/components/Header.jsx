@@ -39,6 +39,7 @@ export default function Header() {
     }
   }, [selectedFile]);
 
+  
   const addImageToPost = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -88,6 +89,9 @@ export default function Header() {
     setIsOpen(false);
     location.reload();
   };
+
+  
+
 
   return (
     <>
