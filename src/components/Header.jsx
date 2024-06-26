@@ -33,12 +33,6 @@ export default function Header() {
   const { data: session } = useSession();
   const db = getFirestore(app);
 
-  useEffect(() => {
-    if (selectedFile) {
-      uploadImageToStorage();
-    }
-  }, [selectedFile]);
-
   
   const addImageToPost = (e) => {
     const file = e.target.files[0];
@@ -47,6 +41,15 @@ export default function Header() {
       setImagefileUrl(URL.createObjectURL(file));
     }
   };
+
+
+  useEffect(() => {
+    if (selectedFile) {
+      uploadImageToStorage();
+    }
+  }, [selectedFile]);
+
+
 
   const uploadImageToStorage = async () => {
     setImageFileUploading(true);
@@ -75,6 +78,7 @@ export default function Header() {
       }
     );
   };
+  
 
   const handleSubmit = async () => {
     setPostUploading(true);
@@ -161,7 +165,7 @@ export default function Header() {
             {selectedFile ? (
               <img
                 onClick={() => setSelectedFile(null)}
-                className={`w-full max-h-[250px] object-cover ${
+                className={`w-full max-h-[250px] object-cover cursor-pointer ${
                   imageFileUploading ? "animate-pulse" : ""
                 }`}
                 src={imagefileUrl}
