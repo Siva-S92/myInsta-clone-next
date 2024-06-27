@@ -6,7 +6,7 @@ import { initializeApp } from "firebase/app";
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: "insta-nextjs-fb.firebaseapp.com",
+  authDomain: process.env.NEXT_PUBLIC_NEXTAUTH_URL,
   projectId: "insta-nextjs-fb",
   storageBucket: "insta-nextjs-fb.appspot.com",
   messagingSenderId: "88392067403",
