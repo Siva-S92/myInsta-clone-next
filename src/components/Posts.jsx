@@ -3,6 +3,8 @@ import {app} from '../firebase'
 import { collection, getDocs, getFirestore, orderBy, query } from 'firebase/firestore'
 import Post from './Post';
 
+
+export const dynamic = 'force-dynamic';
 export default async function Posts() {
   const db = getFirestore(app);
   const q = query(collection(db, 'posts'), orderBy('timestamp', 'desc'));
