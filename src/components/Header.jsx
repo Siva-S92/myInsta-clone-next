@@ -21,6 +21,10 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 
+//after a user signs in with Google (via NextAuth), Firebase recognizes the user as authenticated.
+import { getAuth, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
+
+
 export default function Header() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagefileUrl, setImagefileUrl] = useState(null);
@@ -30,7 +34,22 @@ export default function Header() {
   const [caption, setCaption] = useState("");
 
   const filePickerRef = useRef(null);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+
+  //after a user signs in with Google (via NextAuth), Firebase recognizes the user as authenticated.
+  useEffect(() => {
+    if (session) {
+      const auth = getAuth();
+      const credential = GoogleAuthProvider.credential(session.accessToken);
+
+      signInWithCredential(auth, credential).catch((error) => {
+        console.error("Error signing in with Firebase:", error);
+      });
+    }
+  }, [session]);
+  //*****************************************************************************************************
+
+
   const db = getFirestore(app);
 
   
