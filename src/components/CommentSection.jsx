@@ -47,7 +47,7 @@ export default function CommentSection({ id }) {
             <div key={index} className="flex justify-between items-center space-x-2 mb-2">
               <img
                 src={comment.data().userImage}
-                alt="userimage"
+                alt="user-photo"
                 className="h-7 rounded-full object-cover border p-[2px]"
               />
               <p className="text-sm flex-1 truncate">
