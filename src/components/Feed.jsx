@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Posts from './Posts'
 import MiniProfile from './MiniProfile'
 //after a user signs in with Google (via NextAuth), Firebase recognizes the user as authenticated.
@@ -9,6 +9,7 @@ import { getAuth, signInWithCustomToken } from "firebase/auth";
 export default function Feed() {
   //after a user signs in with Google (via NextAuth), Firebase recognizes the user as authenticated.
   const { data: session, status } = useSession();
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   useEffect(() => {
     const authenticateWithFirebase = async () => {
@@ -29,6 +30,7 @@ export default function Feed() {
           const auth = getAuth();
           await signInWithCustomToken(auth, customToken);
           console.log("Successfully signed in with Firebase using custom token");
+          setIsAuthenticated(true)
         } catch (error) {
           console.error("Error signing in with Firebase:", error);
         }
@@ -38,7 +40,7 @@ export default function Feed() {
     if (status === "authenticated") {
       authenticateWithFirebase();
     }
-  }, [session, status]);
+  }, [session, status, isAuthenticated]);
 
   if (status === "loading") return <p>Loading...</p>;
 
