@@ -40,7 +40,7 @@ export default function Feed() {
     if (status === "authenticated") {
       authenticateWithFirebase();
     }
-  }, [session, status, isAuthenticated]);
+  }, [session, status, isAuthenticated, authenticateWithFirebase]);
 
   if (status === "loading") return <p>Loading...</p>;
 
