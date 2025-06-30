@@ -25,7 +25,7 @@ export default function Posts() {
 
   useEffect(()=> {
     fetchData()
-  },[data, fetchData])
+  },[])
 
   return (
     <div>{data && data.map((post) => <Post key={post.id} post={post} />)}</div>
