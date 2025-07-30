@@ -1,4 +1,5 @@
-"use client";
+
+'use client'
 import React, { useEffect, useState } from "react";
 import { app } from "../firebase";
 import {
@@ -18,21 +19,17 @@ export default function Posts() {
     const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
 
     // Use onSnapshot for real-time updates
-    const unsubscribe = onSnapshot(
-      q,
-      (querySnapshot) => {
-        let datas = [];
-        querySnapshot.forEach((doc) => {
-          datas.push({ id: doc.id, ...doc.data() });
-        });
-        setData(datas);
-        console.log("Posts updated in real-time:", datas);
-      },
-      (error) => {
-        // This is where the permission error will be caught cleanly
-        console.error("Error listening to posts:", error);
-      }
-    );
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      let datas = [];
+      querySnapshot.forEach((doc) => {
+        datas.push({ id: doc.id, ...doc.data() });
+      });
+      setData(datas);
+      console.log("Posts updated in real-time:", datas);
+    }, (error) => {
+      // This is where the permission error will be caught cleanly
+      console.error("Error listening to posts:", error);
+    });
 
     // Cleanup: Unsubscribe from the listener when the component unmounts
     return () => unsubscribe();
